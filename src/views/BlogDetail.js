@@ -5,25 +5,41 @@ import { useParams } from "react-router-dom";
 
 function BlogDetail() {
 
+    // To Get blog details 
     const [blogDetailAll, setBlogDetailAll] = useState({ data:[]});
     const [loading,setLoading] = useState(true);
 
+    // To Get setting data
+    const [settingDetailAll, setSettinngDetailAll] = useState({ data:[]});
+    const [settingLoading,setSettingLoading] = useState(true);
+
+    // To get request segment
     const  useParamsD = useParams();
     
-
     useEffect(() => {
         
-        const fetchData = async () => {
+        const fetchBlogDetailData = async () => {
           const result = await axios(
             'http://localhost/softtechover/api/ApigetSingleBlogDetail/'+useParamsD.blogId,
           );
-          
           console.log(result.data.data);
           setBlogDetailAll({data:result.data.data});
           setLoading(false);
-            
         };
-        fetchData();
+        fetchBlogDetailData();
+      }, []);
+
+      useEffect(() => {
+        
+          const fetchSettingData = async () => {
+          const result = await axios(
+            'http://localhost/softtechover/api/ApiGetSettingData'
+          );
+          console.log('setting',result.data.data);
+          setSettinngDetailAll({data:result.data.data});
+          setSettingLoading(false);
+        };
+        fetchSettingData();
       }, []);
     
       function createMarkup(data) {
@@ -32,21 +48,16 @@ function BlogDetail() {
 
     return (
         <main id="main">
-
-            <section id="breadcrumbs" className="breadcrumbs">
+          <section id="breadcrumbs" className="breadcrumbs">
             <div className="container">
-        
                 <ol>
                 <li><a href="/">Home</a></li>
                 <li><a href="/blog">Blog</a></li>
                 </ol>
                 { loading == false ? <h2>{blogDetailAll.data.name}</h2> : "Loading"}
-                
-        
             </div>
-            </section>
-
-        { loading == false ?  
+          </section>
+          { loading == false ?  
         
         <section id="blog" className="blog">
         <div className="container">
@@ -78,20 +89,6 @@ function BlogDetail() {
                 </div>
   
                 <div className="entry-footer clearfix">
-                  <div className="float-left">
-                    <i className="icofont-folder"></i>
-                    <ul className="cats">
-                      <li><a href="#">Business</a></li>
-                    </ul>
-  
-                    <i className="icofont-tags"></i>
-                    <ul className="tags">
-                      <li><a href="#">Creative</a></li>
-                      <li><a href="#">Tips</a></li>
-                      <li><a href="#">Marketing</a></li>
-                    </ul>
-                  </div>
-  
                   <div className="float-right share">
                     <a href="" title="Share on Twitter"><i className="icofont-twitter"></i></a>
                     <a href="" title="Share on Facebook"><i className="icofont-facebook"></i></a>
@@ -101,36 +98,30 @@ function BlogDetail() {
                 </div>
   
               </article>
-  
-              <div className="blog-author clearfix">
-                <img src="assets/img/blog-author.jpg" className="rounded-circle float-left" alt="" />
-                <h4>Jane Smith</h4>
-                <div className="social-links">
-                  <a href="https://twitters.com/#"><i className="icofont-twitter"></i></a>
-                  <a href="https://facebook.com/#"><i className="icofont-facebook"></i></a>
-                  <a href="https://instagram.com/#"><i className="icofont-instagram"></i></a>
-                </div>
-                <p>
-                  Itaque quidem optio quia voluptatibus dolorem dolor. Modi eum sed possimus accusantium. Quas repellat voluptatem officia numquam sint aspernatur voluptas. Esse et accusantium ut unde voluptas.
-                </p>
-              </div>
-  
               
+              { settingLoading == false ? 
+                  <div className="blog-author clearfix">
+                    <img src={settingDetailAll.data.author_image} className="rounded-circle float-left" alt={settingDetailAll.data.author_name} />
+                    <h4>{settingDetailAll.data.author_name}</h4>
+                    <div className="social-links">
+                      <a href="https://twitters.com/#"><i className="icofont-twitter"></i></a>
+                      <a href="https://facebook.com/#"><i className="icofont-facebook"></i></a>
+                      <a href="https://instagram.com/#"><i className="icofont-instagram"></i></a>
+                    </div>
+                    <div dangerouslySetInnerHTML={createMarkup(settingDetailAll.data.author_description_two)}  />
+                  </div>
+              : 'Loading...'}
             </div>
   
             <div className="col-lg-4">
-  
               <div className="sidebar">
-  
                 <h3 className="sidebar-title">Search</h3>
                 <div className="sidebar-item search-form">
                   <form action="">
                     <input type="text" />
                     <button type="submit"><i className="icofont-search"></i></button>
                   </form>
-  
-                </div>
-  
+               </div>
                 <h3 className="sidebar-title">Categories</h3>
                 <div className="sidebar-item categories">
                   <ul>
@@ -141,9 +132,7 @@ function BlogDetail() {
                     <li><a href="#">Creative <span>(8)</span></a></li>
                     <li><a href="#">Educaion <span>(14)</span></a></li>
                   </ul>
-  
                 </div>
-  
                 <h3 className="sidebar-title">Recent Posts</h3>
                 <div className="sidebar-item recent-posts">
                   <div className="post-item clearfix">
@@ -151,9 +140,7 @@ function BlogDetail() {
                     <h4><a href="blog-single.html">Nihil blanditiis at in nihil autem</a></h4>
                     Jan 1, 2020
                   </div>
-                  
                </div>
-  
                 <h3 className="sidebar-title">Tags</h3>
                 <div className="sidebar-item tags">
                   <ul>
@@ -170,19 +157,15 @@ function BlogDetail() {
                     <li><a href="#">Tips</a></li>
                     <li><a href="#">Marketing</a></li>
                   </ul>
-  
                 </div>
-  
               </div>
-  
             </div>
-  
+
+
           </div>
-  
         </div>
       </section>
-        
-        : "Loading"}    
+      : "Loading"}    
 
     
       </main>

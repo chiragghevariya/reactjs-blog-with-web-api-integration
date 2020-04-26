@@ -8,12 +8,28 @@ function BlogList() {
     const [blogAlldata, setBlogAlldata] = useState({ data:[]});
     const [loading,setLoading] = useState(true);
 
+    const [categoryAlldata, setCategoryAlldata] = useState({ data:[]});
+    const [categoryloading,setCategoryLoading] = useState(true);
+    
+    useEffect(() => {
+      const fetchCategoryData = async () => {
+        const result = await axios(
+          'http://localhost/softtechover/api/ApiGetAllCommonCategoryList',
+        );
+        console.log('category',result.data.data);
+        setCategoryAlldata({data:result.data.data});
+        setCategoryLoading(false);
+          
+      };
+      fetchCategoryData();
+    }, []);
+
     useEffect(() => {
         const fetchData = async () => {
           const result = await axios(
             'http://localhost/softtechover/api/ApiGetHomePageLatestPost',
           );
-          console.log(result.data.data);
+          console.log('blog',result.data.data);
           setBlogAlldata({data:result.data.data.data});
           setLoading(false);
             
@@ -30,13 +46,11 @@ function BlogList() {
 
     <section id="breadcrumbs" className="breadcrumbs">
       <div className="container">
-
         <ol>
           <li><a href="/">Home</a></li>
           <li>Blog</li>
         </ol>
         <h2>Blog</h2>
-
       </div>
     </section>
     <section id="blog" className="blog">
@@ -44,7 +58,7 @@ function BlogList() {
         <div className="row">
           <div className="col-lg-8 entries">
               <div className="row">
-              {loading == false ? 
+              { loading == false ? 
                 
                 blogAlldata.data.map( (item,index) => (
                     
@@ -76,7 +90,7 @@ function BlogList() {
     
                     </article>
                   </div>
-                  )) : 'loaderData'
+                  )) : 'loading...'
                 }
             </div>
             <div className="blog-pagination">
@@ -102,16 +116,20 @@ function BlogList() {
                 </form>
 
               </div>
-
+              
+                  
               <h3 className="sidebar-title">Categories</h3>
               <div className="sidebar-item categories">
                 <ul>
-                  <li><a href="#">General <span>(25)</span></a></li>
-                  <li><a href="#">Lifestyle <span>(12)</span></a></li>
-                  <li><a href="#">Travel <span>(5)</span></a></li>
-                  <li><a href="#">Design <span>(22)</span></a></li>
-                  <li><a href="#">Creative <span>(8)</span></a></li>
-                  <li><a href="#">Educaion <span>(14)</span></a></li>
+                  {
+                    categoryAlldata.data.map((item,index)=>(
+
+                      <li key={index}>
+                        <a href="#">{item.name} <span>({item.multiple_category_status_count})</span></a>
+                      </li>
+                      
+                    ))}
+                  
                 </ul>
 
               </div>
