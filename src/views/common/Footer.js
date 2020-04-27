@@ -1,45 +1,125 @@
-import React from 'react';
+import React,{ useState,useEffect} from 'react';
+import axios from 'axios';
+import { useParams } from "react-router-dom";
 
 function Footer(){
+
+  // To Get setting data
+  const [settingDetailAll, setSettinngDetailAll] = useState({ data:[]});
+  const [settingLoading,setSettingLoading] = useState(true);
+
+  useEffect(() => {
+          
+      const fetchSettingData = async () => {
+      const result = await axios(
+        'http://localhost/softtechover/api/ApiGetSettingData'
+      );
+      console.log('settting',result.data.data);
+      setSettinngDetailAll({data:result.data.data});
+      setSettingLoading(false);
+    };
+    fetchSettingData();
+  }, []);
+
+    // To Get Footer cms page data
+    const [cmsDetailAll, setCmsDetailAll] = useState({ data:[]});
+    const [cmsLoading,setCmsLoading] = useState(true);
+  
+    useEffect(() => {
+            
+        const fetchCmsData = async () => {
+        const result = await axios(
+          'http://localhost/softtechover/api/ApiFooterCmsPage'
+        );
+        console.log('cms',result.data.data);
+        setCmsDetailAll({data:result.data.data});
+        setCmsLoading(false);
+      };
+      fetchCmsData();
+    }, []);
+
+    // To Get Footer cms page data
+    const [categoryDetailAll, setCategoryDetailAll] = useState({ data:[]});
+    const [categoryLoading,setCategoryLoading] = useState(true);
+  
+    useEffect(() => {
+            
+        const fetchCategoryData = async () => {
+        const result = await axios(
+          'http://localhost/softtechover/api/ApiFooterCategory'
+        );
+        console.log('category',result.data.data);
+        setCategoryDetailAll({data:result.data.data});
+        setCategoryLoading(false);
+      };
+      fetchCategoryData();
+    }, []);
+
+     // To Get Footer cms page data
+     const [socialDetailAll, setSocialDetailAll] = useState({ data:[]});
+     const [socialLoading,setSocialLoading] = useState(true);
+   
+     useEffect(() => {
+             
+         const fetchSocialData = async () => {
+         const result = await axios(
+           'http://localhost/softtechover/api/ApiGetSocialMedia'
+         );
+         console.log('social',result.data.data);
+         setSocialDetailAll({data:result.data.data});
+         setSocialLoading(false);
+       };
+       fetchSocialData();
+     }, []);
+
+  function createMarkup(data) {
+    return {__html: data };
+  }
+
   return (
     <div className="jhio">
         <footer id="footer">
             <div className="footer-top">
               <div className="container">
                 <div className="row">
-                  <div className="col-lg-3 col-md-6 footer-contact">
-                    <h3>Tempo</h3>
-                    <p>
-                      A108 Adam Street <br/>
-                      New York, NY 535022<br/>
-                      United States <br/><br/>
-                      <strong>Phone:</strong> +1 5589 55488 55<br/>
-                      <strong>Email:</strong> info@example.com<br/>
-                    </p>
-                  </div>
+                  { settingLoading == false ? 
+                    <div className="col-lg-3 col-md-6 footer-contact">
+                      <h3>Tempo</h3>
+                      <div dangerouslySetInnerHTML={createMarkup(settingDetailAll.data.address)}  />
+                    </div>
+                  : 'Loading' 
+                  }
+                  
+                  {(cmsLoading == false && cmsDetailAll.data.length > 0) ? 
 
-                  <div className="col-lg-2 col-md-6 footer-links">
-                    <h4>Useful Links</h4>
-                    <ul>
-                      <li><i className="bx bx-chevron-right"></i> <a href="#">Home</a></li>
-                      <li><i className="bx bx-chevron-right"></i> <a href="#">About us</a></li>
-                      <li><i className="bx bx-chevron-right"></i> <a href="#">Services</a></li>
-                      <li><i className="bx bx-chevron-right"></i> <a href="#">Terms of service</a></li>
-                      <li><i className="bx bx-chevron-right"></i> <a href="#">Privacy policy</a></li>
-                    </ul>
-                  </div>
+                      <div className="col-lg-2 col-md-6 footer-links">
+                        <h4>About Us</h4>
+                        <ul>
+                          {
+                            cmsDetailAll.data.map((item,index)=>(
+                            <li key={index}><i className="bx bx-chevron-right"></i> <a href="#">{item.name}</a></li>
+                            ))
+                          }
+                        </ul>
+                      </div>
+                  
+                  : '' 
+                  
+                  }
+                  
+                  { (categoryLoading == false && categoryDetailAll.data.length > 0) ? 
+                    <div className="col-lg-3 col-md-6 footer-links">
+                      <h4>Category</h4>
+                      <ul>
+                        {categoryDetailAll.data.map((item,index)=>(
+                          <li key={index}><i className="bx bx-chevron-right"></i> <a href="#">{item.name}</a></li>
+                        ))}
+                        
+                      </ul>
+                    </div>
 
-                  <div className="col-lg-3 col-md-6 footer-links">
-                    <h4>Our Services</h4>
-                    <ul>
-                      <li><i className="bx bx-chevron-right"></i> <a href="#">Web Design</a></li>
-                      <li><i className="bx bx-chevron-right"></i> <a href="#">Web Development</a></li>
-                      <li><i className="bx bx-chevron-right"></i> <a href="#">Product Management</a></li>
-                      <li><i className="bx bx-chevron-right"></i> <a href="#">Marketing</a></li>
-                      <li><i className="bx bx-chevron-right"></i> <a href="#">Graphic Design</a></li>
-                    </ul>
-                  </div>
-
+                  :'' }
+                  
                   <div className="col-lg-4 col-md-6 footer-newsletter">
                     <h4>Join Our Newsletter</h4>
                     <p>Tamen quem nulla quae legam multos aute sint culpa legam noster magna</p>
@@ -47,7 +127,6 @@ function Footer(){
                       <input type="email" name="email" /><input type="submit" value="Subscribe" />
                     </form>
                   </div>
-
                 </div>
               </div>
             </div>
@@ -62,13 +141,23 @@ function Footer(){
                   Designed by <a href="https://bootstrapmade.com/">BootstrapMade</a>
                 </div>
               </div>
-              <div className="social-links text-center text-md-right pt-3 pt-md-0">
+
+              { (socialLoading == false && socialDetailAll.data.length > 0) ? 
+                <div className="social-links text-center text-md-right pt-3 pt-md-0">
+                    {socialDetailAll.data.map((item,index)=>(
+                      <a key={index} href={item.url} target="_blank" className="twitter"><i className="bx bxl-twitter"></i></a>
+                    ))}
+                </div>
+              :'' }
+              
+
+              {/* <div className="social-links text-center text-md-right pt-3 pt-md-0">
                 <a href="#" className="twitter"><i className="bx bxl-twitter"></i></a>
                 <a href="#" className="facebook"><i className="bx bxl-facebook"></i></a>
                 <a href="#" className="instagram"><i className="bx bxl-instagram"></i></a>
                 <a href="#" className="google-plus"><i className="bx bxl-skype"></i></a>
                 <a href="#" className="linkedin"><i className="bx bxl-linkedin"></i></a>
-              </div>
+              </div> */}
             </div>
             </footer>
 

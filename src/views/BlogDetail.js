@@ -1,6 +1,8 @@
 import React,{ useState,useEffect}  from 'react';
 import axios from 'axios';
 import { useParams } from "react-router-dom";
+import BlogSidebar from "./common/BlogSidebar";
+import {Helmet} from "react-helmet";
 
 
 function BlogDetail() {
@@ -22,7 +24,6 @@ function BlogDetail() {
           const result = await axios(
             'http://localhost/softtechover/api/ApigetSingleBlogDetail/'+useParamsD.blogId,
           );
-          console.log(result.data.data);
           setBlogDetailAll({data:result.data.data});
           setLoading(false);
         };
@@ -35,7 +36,6 @@ function BlogDetail() {
           const result = await axios(
             'http://localhost/softtechover/api/ApiGetSettingData'
           );
-          console.log('setting',result.data.data);
           setSettinngDetailAll({data:result.data.data});
           setSettingLoading(false);
         };
@@ -54,7 +54,13 @@ function BlogDetail() {
                 <li><a href="/">Home</a></li>
                 <li><a href="/blog">Blog</a></li>
                 </ol>
-                { loading == false ? <h2>{blogDetailAll.data.name}</h2> : "Loading"}
+                { loading == false ? 
+                <h2> 
+              <Helmet>
+                <title>{blogDetailAll.data.name} | ReactJs</title>
+                <meta content="" name="descriptison" />
+                <meta content="" name="keywords" />
+              </Helmet>{blogDetailAll.data.name}</h2> : "Loading"}
             </div>
           </section>
           { loading == false ?  
@@ -113,53 +119,7 @@ function BlogDetail() {
               : 'Loading...'}
             </div>
   
-            <div className="col-lg-4">
-              <div className="sidebar">
-                <h3 className="sidebar-title">Search</h3>
-                <div className="sidebar-item search-form">
-                  <form action="">
-                    <input type="text" />
-                    <button type="submit"><i className="icofont-search"></i></button>
-                  </form>
-               </div>
-                <h3 className="sidebar-title">Categories</h3>
-                <div className="sidebar-item categories">
-                  <ul>
-                    <li><a href="#">General <span>(25)</span></a></li>
-                    <li><a href="#">Lifestyle <span>(12)</span></a></li>
-                    <li><a href="#">Travel <span>(5)</span></a></li>
-                    <li><a href="#">Design <span>(22)</span></a></li>
-                    <li><a href="#">Creative <span>(8)</span></a></li>
-                    <li><a href="#">Educaion <span>(14)</span></a></li>
-                  </ul>
-                </div>
-                <h3 className="sidebar-title">Recent Posts</h3>
-                <div className="sidebar-item recent-posts">
-                  <div className="post-item clearfix">
-                    <img src="assets/img/blog-recent-1.jpg" alt="" />
-                    <h4><a href="blog-single.html">Nihil blanditiis at in nihil autem</a></h4>
-                    Jan 1, 2020
-                  </div>
-               </div>
-                <h3 className="sidebar-title">Tags</h3>
-                <div className="sidebar-item tags">
-                  <ul>
-                    <li><a href="#">App</a></li>
-                    <li><a href="#">IT</a></li>
-                    <li><a href="#">Business</a></li>
-                    <li><a href="#">Business</a></li>
-                    <li><a href="#">Mac</a></li>
-                    <li><a href="#">Design</a></li>
-                    <li><a href="#">Office</a></li>
-                    <li><a href="#">Creative</a></li>
-                    <li><a href="#">Studio</a></li>
-                    <li><a href="#">Smart</a></li>
-                    <li><a href="#">Tips</a></li>
-                    <li><a href="#">Marketing</a></li>
-                  </ul>
-                </div>
-              </div>
-            </div>
+            <BlogSidebar />
 
 
           </div>

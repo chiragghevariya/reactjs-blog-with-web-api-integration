@@ -1,6 +1,8 @@
 import React,{ useState,useEffect}  from 'react';
 import axios from 'axios';
 import "../index.css";
+import BlogSidebar from "./common/BlogSidebar";
+import {Helmet} from "react-helmet";
 
 
 function BlogList() {
@@ -8,22 +10,7 @@ function BlogList() {
     const [blogAlldata, setBlogAlldata] = useState({ data:[]});
     const [loading,setLoading] = useState(true);
 
-    const [categoryAlldata, setCategoryAlldata] = useState({ data:[]});
-    const [categoryloading,setCategoryLoading] = useState(true);
-    
-    useEffect(() => {
-      const fetchCategoryData = async () => {
-        const result = await axios(
-          'http://localhost/softtechover/api/ApiGetAllCommonCategoryList',
-        );
-        console.log('category',result.data.data);
-        setCategoryAlldata({data:result.data.data});
-        setCategoryLoading(false);
-          
-      };
-      fetchCategoryData();
-    }, []);
-
+    // TO GET ALL BLOG DATA
     useEffect(() => {
         const fetchData = async () => {
           const result = await axios(
@@ -42,8 +29,14 @@ function BlogList() {
       }
 
     return (
-    <main id="main">
 
+      
+    <main id="main">
+      <Helmet>
+      <title>Blog | ReactJs</title>
+      <meta content="" name="descriptison" />
+      <meta content="" name="keywords" />
+    </Helmet>
     <section id="breadcrumbs" className="breadcrumbs">
       <div className="container">
         <ol>
@@ -104,67 +97,7 @@ function BlogList() {
             </div>
           </div>
 
-          <div className="col-lg-4">
-
-            <div className="sidebar">
-
-              <h3 className="sidebar-title">Search</h3>
-              <div className="sidebar-item search-form">
-                <form action="">
-                  <input type="text" />
-                  <button type="submit"><i className="icofont-search"></i></button>
-                </form>
-
-              </div>
-              
-                  
-              <h3 className="sidebar-title">Categories</h3>
-              <div className="sidebar-item categories">
-                <ul>
-                  {
-                    categoryAlldata.data.map((item,index)=>(
-
-                      <li key={index}>
-                        <a href="#">{item.name} <span>({item.multiple_category_status_count})</span></a>
-                      </li>
-                      
-                    ))}
-                  
-                </ul>
-
-              </div>
-
-              <h3 className="sidebar-title">Recent Posts</h3>
-              <div className="sidebar-item recent-posts">
-                <div className="post-item clearfix">
-                  <img src="assets/img/blog-recent-1.jpg" alt="" />
-                  <h4><a href="/">Nihil blanditiis at in nihil autem</a></h4>
-                  Jan 1, 2020
-                </div>
-              </div>
-
-              <h3 className="sidebar-title">Tags</h3>
-              <div className="sidebar-item tags">
-                <ul>
-                  <li><a href="#">App</a></li>
-                  <li><a href="#">IT</a></li>
-                  <li><a href="#">Business</a></li>
-                  <li><a href="#">Business</a></li>
-                  <li><a href="#">Mac</a></li>
-                  <li><a href="#">Design</a></li>
-                  <li><a href="#">Office</a></li>
-                  <li><a href="#">Creative</a></li>
-                  <li><a href="#">Studio</a></li>
-                  <li><a href="#">Smart</a></li>
-                  <li><a href="#">Tips</a></li>
-                  <li><a href="#">Marketing</a></li>
-                </ul>
-
-              </div>
-
-            </div>
-
-          </div>
+          <BlogSidebar />
 
         </div>
 

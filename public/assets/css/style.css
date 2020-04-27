@@ -1801,7 +1801,6 @@ section {
 
 .blog .sidebar .recent-posts h4 {
   font-size: 15px;
-  margin-left: 95px;
   font-weight: bold;
 }
 
@@ -1816,7 +1815,6 @@ section {
 
 .blog .sidebar .recent-posts time {
   display: block;
-  margin-left: 95px;
   font-style: italic;
   font-size: 14px;
   color: #b1a0a3;
