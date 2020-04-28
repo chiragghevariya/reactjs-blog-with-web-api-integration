@@ -67,19 +67,26 @@ function Footer(){
     function submitFrom(event){
 
       event.preventDefault();
-      
-        const params = {
-          'email': email,
-          '_token':'24zQ0O5jxV933rpVB7kiuhC9EfdZb6y2CTpaSXCH'
-        };
-      axios.post('http://localhost/softtechover/api/news-letter/store',params).then(response =>{
-        console.log('save');
+      axios.post('http://localhost/softtechover/api/news-letter/store', {
+        email: email
+      })
+      .then((response) => {
+        setEmail('');
+        console.log("mess",response);
+      }).catch(error => { 
         
-    });
-
+        console.log('error', error);
+        console.log('errorType', typeof error);
+        console.log('error', Object.assign({}, error));
+        console.log('getOwnPropertyNames', Object.getOwnPropertyNames(error));
+        console.log('stackProperty', Object.getOwnPropertyDescriptor(error, 'stack'));
+        console.log('messageProperty', Object.getOwnPropertyDescriptor(error, 'message'));
+        console.log('stackEnumerable', error.propertyIsEnumerable('stack'));
+        console.log('messageEnumerable', error.propertyIsEnumerable('message')); 
+      
+      });
+    
     }
-
-
      useEffect(() => {
              
          const fetchSocialData = async () => {
@@ -95,8 +102,6 @@ function Footer(){
   function createMarkup(data) {
     return {__html: data };
   }
-
-
 
   return (
     <div className="jhio">
@@ -146,8 +151,8 @@ function Footer(){
                     <h4>Join Our Newsletter</h4>
                     <p>Tamen quem nulla quae legam multos aute sint culpa legam noster magna</p>
                     <form onSubmit={submitFrom}>
-                      <input type="email" name="email" onChange={handleEmailChang} />
-                      <button type="submit">Subscribe</button>
+                      <input type="email" name="email" value={email} onChange={handleEmailChang} />
+                      <input type="submit" value="Subscribe" />
                     </form>
                   </div>
                 </div>
