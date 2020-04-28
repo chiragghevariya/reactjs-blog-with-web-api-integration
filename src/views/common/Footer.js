@@ -14,7 +14,6 @@ function Footer(){
       const result = await axios(
         'http://localhost/softtechover/api/ApiGetSettingData'
       );
-      console.log('settting',result.data.data);
       setSettinngDetailAll({data:result.data.data});
       setSettingLoading(false);
     };
@@ -31,7 +30,6 @@ function Footer(){
         const result = await axios(
           'http://localhost/softtechover/api/ApiFooterCmsPage'
         );
-        console.log('cms',result.data.data);
         setCmsDetailAll({data:result.data.data});
         setCmsLoading(false);
       };
@@ -48,7 +46,6 @@ function Footer(){
         const result = await axios(
           'http://localhost/softtechover/api/ApiFooterCategory'
         );
-        console.log('category',result.data.data);
         setCategoryDetailAll({data:result.data.data});
         setCategoryLoading(false);
       };
@@ -58,14 +55,37 @@ function Footer(){
      // To Get Footer cms page data
      const [socialDetailAll, setSocialDetailAll] = useState({ data:[]});
      const [socialLoading,setSocialLoading] = useState(true);
-   
+
+     // NEWSLETTER DATTA
+     const [email, setEmail] = useState('');
+
+    function handleEmailChang(event){
+
+        setEmail(event.target.value);
+    }
+
+    function submitFrom(event){
+
+      event.preventDefault();
+      
+        const params = {
+          'email': email,
+          '_token':'24zQ0O5jxV933rpVB7kiuhC9EfdZb6y2CTpaSXCH'
+        };
+      axios.post('http://localhost/softtechover/api/news-letter/store',params).then(response =>{
+        console.log('save');
+        
+    });
+
+    }
+
+
      useEffect(() => {
              
          const fetchSocialData = async () => {
          const result = await axios(
            'http://localhost/softtechover/api/ApiGetSocialMedia'
          );
-         console.log('social',result.data.data);
          setSocialDetailAll({data:result.data.data});
          setSocialLoading(false);
        };
@@ -75,6 +95,8 @@ function Footer(){
   function createMarkup(data) {
     return {__html: data };
   }
+
+
 
   return (
     <div className="jhio">
@@ -123,8 +145,9 @@ function Footer(){
                   <div className="col-lg-4 col-md-6 footer-newsletter">
                     <h4>Join Our Newsletter</h4>
                     <p>Tamen quem nulla quae legam multos aute sint culpa legam noster magna</p>
-                    <form action="" method="post">
-                      <input type="email" name="email" /><input type="submit" value="Subscribe" />
+                    <form onSubmit={submitFrom}>
+                      <input type="email" name="email" onChange={handleEmailChang} />
+                      <button type="submit">Subscribe</button>
                     </form>
                   </div>
                 </div>

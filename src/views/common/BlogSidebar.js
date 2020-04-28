@@ -1,7 +1,7 @@
 import React,{ useState,useEffect}  from 'react';
 import axios from 'axios';
 
-function BlogSidebar() {
+function BlogSidebar(props) {
     
     const [recentBlogAlldata, setRecentBlogAlldata] = useState({ data:[]});
     const [recentBlogLoading,setRecentBlogLoading] = useState(true);
@@ -40,8 +40,8 @@ function BlogSidebar() {
             <div className="sidebar">
             <h3 className="sidebar-title">Search</h3>
             <div className="sidebar-item search-form">
-                <form action="">
-                <input type="text" />
+                <form action="/blog/" method="GET">
+                <input type="text" name="search" defaultValue={props.searchStringData}  />
                 <button type="submit"><i className="icofont-search"></i></button>
                 </form>
             </div>

@@ -5,20 +5,35 @@ import BlogSidebar from "./common/BlogSidebar";
 import {Helmet} from "react-helmet";
 
 
-function BlogList() {
+function BlogList(props) {
+    
     
     const [blogAlldata, setBlogAlldata] = useState({ data:[]});
     const [loading,setLoading] = useState(true);
-
+    const queryParameter = new URLSearchParams(props.location.search);
+    const searchR = queryParameter.get('search');
+    
     // TO GET ALL BLOG DATA
     useEffect(() => {
+
         const fetchData = async () => {
           const result = await axios(
-            'http://localhost/softtechover/api/ApiGetHomePageLatestPost',
+            'http://localhost/softtechover/api/ApiGetHomePageLatestPost',{
+              
+              params: {
+                search: searchR,
+              }
+            }
           );
-          console.log('blog',result.data.data);
-          setBlogAlldata({data:result.data.data.data});
-          setLoading(false);
+
+          if (result.data.status == 200) {
+            setBlogAlldata({data:result.data.data.data});
+            setLoading(false);
+
+          }else{
+            setLoading(true);
+          }
+
             
         };
         fetchData();
@@ -83,9 +98,10 @@ function BlogList() {
     
                     </article>
                   </div>
-                  )) : 'loading...'
+                  )) : 'Data not found'
                 }
             </div>
+            { loading == false ? 
             <div className="blog-pagination">
               <ul className="justify-content-center">
                 <li className="disabled"><i className="icofont-rounded-left"></i></li>
@@ -94,10 +110,10 @@ function BlogList() {
                 <li><a href="#">3</a></li>
                 <li><a href="#"><i className="icofont-rounded-right"></i></a></li>
               </ul>
-            </div>
+            </div> : '' }
           </div>
 
-          <BlogSidebar />
+          <BlogSidebar searchStringData={searchR} />
 
         </div>
 
